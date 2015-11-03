@@ -55,14 +55,13 @@ public class MainActivity extends AppCompatActivity {
 
         convertButton.setOnClickListener(new View.OnClickListener() {
 
-            String source = "USD";
-            String target = "EUR";
-            String format = "json";
-            String currencyUrl =  "https://currency-api.appspot.com/api/" +
-                    source + "/" + target + "." + format;
-
             @Override
             public void onClick(View v) {
+                String source = sourceSpinner.getSelectedItem().toString().substring(0,3);
+                String target = targetSpinner.getSelectedItem().toString().substring(0,3);;
+                String format = "json";
+                String currencyUrl =  "https://currency-api.appspot.com/api/" +
+                        source + "/" + target + "." + format;
                 if(isNetworkAvailable()) {
 
                     OkHttpClient client = new OkHttpClient();
