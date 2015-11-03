@@ -3,4 +3,45 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+
+    <string-array name="currencies_array">
+        <item>ARS - Argentina Peso</item>
+        <item>AUD - Australia Dollar</item>
+        <item>BTC - Bitcoin</item>
+        <item>BRL - Brazilian Real</item>
+        <item>CAD - Canada Dollar</item>
+        <item>CLP - Chile Peso</item>
+        <item>CNY - China Yuan Renminbi</item>
+        <item>CZK - Czech Republic Koruna</item>
+        <item>DDK - Denmark Krone</item>
+        <item>EUR - Euro</item>
+        <item>FJD - Fiji Dollar</item>
+        <item>HNL - Honduras Lempira</item>
+        <item>HKD - Hong Kong Dollar</item>
+        <item>HUF - Hungary Forint</item>
+        <item>ISK - Iceland Krona</item>
+        <item>INR - India Rupee</item>
+        <item>IDR - Indonesia Rupiah</item>
+        <item>ILS - Israel Shekel</item>
+        <item>JPY - Japan Yen</item>
+        <item>KRW - Korea (South) Won</item>
+        <item>MYR - Malaysia Ringgit</item>
+        <item>MXN - Mexico Peso</item>
+        <item>NZD - New Zealand Dollar</item>
+        <item>NOK - Norway Krone</item>
+        <item>PKR - Pakistan Rupee</item>
+        <item>PHP - Philippines Peso</item>
+        <item>PLN - Poland Zloty</item>
+        <item>RUB - Russia Ruble</item>
+        <item>SGD - Singapore Dollar</item>
+        <item>ZAR - South Africa Rand</item>
+        <item>SEK - Sweden Krona</item>
+        <item>CHF - Switzerland Franc</item>
+        <item>TWD - Taiwan New Dollar</item>
+        <item>THB - Thailand Baht</item>
+        <item>TRY - Turkey Lira</item>
+        <item>GBP - United Kingdom Pound</item>
+        <item>USD - United States Dollar</item>
+        <item>VND - Viet Nam Dong</item>
+    </string-array>
 </resources>

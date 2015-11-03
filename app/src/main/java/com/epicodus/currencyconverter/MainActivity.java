@@ -6,6 +6,9 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -31,13 +34,13 @@ public class MainActivity extends AppCompatActivity {
 
     private CurrencyConversion mCurrencyConversion;
 
+
     @Bind(R.id.amountField) EditText amountField;
     @Bind(R.id.sourceSpinner) Spinner sourceSpinner;
     @Bind(R.id.targetSpinner) Spinner targetSpinner;
     @Bind(R.id.rateResult) TextView rateResult;
     @Bind(R.id.conversionResult) TextView conversionResult;
-
-
+    @Bind(R.id.convertButton) Button convertButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,47 +48,74 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        String source = "USD";
-        String target = "EUR";
-        String format = "json";
-        String currencyUrl =  "https://currency-api.appspot.com/api/" +
-        source + "/" + target + "." + format;
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.currencies_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sourceSpinner.setAdapter(adapter);
+        targetSpinner.setAdapter(adapter);
 
-        if(isNetworkAvailable()) {
+        convertButton.setOnClickListener(new View.OnClickListener() {
 
-            OkHttpClient client = new OkHttpClient();
-            Request request = new Request.Builder()
-                    .url(currencyUrl)
-                    .build();
+            String source = "USD";
+            String target = "EUR";
+            String format = "json";
+            String currencyUrl =  "https://currency-api.appspot.com/api/" +
+                    source + "/" + target + "." + format;
 
-            Call call = client.newCall(request);
-            call.enqueue(new Callback() {
-                @Override
-                public void onFailure(Request request, IOException e) {
+            @Override
+            public void onClick(View v) {
+                if(isNetworkAvailable()) {
 
-                }
+                    OkHttpClient client = new OkHttpClient();
+                    Request request = new Request.Builder()
+                            .url(currencyUrl)
+                            .build();
 
-                @Override
-                public void onResponse(Response response) throws IOException {
-                    try {
-                        String jsonData = response.body().string();
-                        Log.v(TAG, jsonData);
-                        if (response.isSuccessful()) {
-                            mCurrencyConversion = getCurrencyDetails(jsonData);
-                        } else {
-                            alertUserAboutError();
+                    Call call = client.newCall(request);
+                    call.enqueue(new Callback() {
+                        @Override
+                        public void onFailure(Request request, IOException e) {
+
                         }
-                    } catch (IOException e) {
-                        Log.e(TAG, "Exception caught: ", e);
-                    }
-                    catch (JSONException e) {
-                        Log.e(TAG, "Exception caught: ", e);
-                    }
+
+                        @Override
+                        public void onResponse(Response response) throws IOException {
+                            try {
+                                String jsonData = response.body().string();
+                                Log.v(TAG, jsonData);
+                                if (response.isSuccessful()) {
+                                    mCurrencyConversion = getCurrencyDetails(jsonData);
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            updateDisplay();
+                                        }
+                                    });
+
+                                } else {
+                                    alertUserAboutError();
+                                }
+                            } catch (IOException e) {
+                                Log.e(TAG, "Exception caught: ", e);
+                            }
+                            catch (JSONException e) {
+                                Log.e(TAG, "Exception caught: ", e);
+                            }
+                        }
+                    });
                 }
-            });
-        }
-        else {
-            Toast.makeText(this, "Network is unavailable", Toast.LENGTH_LONG).show();
+                else {
+                    Toast.makeText(MainActivity.this, "Network is unavailable", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+    }
+
+    private void updateDisplay() {
+        Double amount = Double.parseDouble(amountField.getText().toString());
+        if (amount != null) {
+            rateResult.setText(mCurrencyConversion.getStringRate());
+            conversionResult.setText(mCurrencyConversion.getStringResult(amount));
         }
     }
 
@@ -95,7 +125,6 @@ public class MainActivity extends AppCompatActivity {
         CurrencyConversion currencyConversion = new CurrencyConversion();
         currencyConversion.setSource(conversionData.getString("source"));
         currencyConversion.setTarget(conversionData.getString("target"));
-        currencyConversion.setAmount(conversionData.getDouble("amount"));
         currencyConversion.setRate(conversionData.getDouble("rate"));
 
         return currencyConversion;

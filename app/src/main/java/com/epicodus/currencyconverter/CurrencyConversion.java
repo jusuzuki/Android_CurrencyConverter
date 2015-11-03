@@ -7,8 +7,7 @@ public class CurrencyConversion {
 
     private String mSource;
     private String mTarget;
-    private double mRate;
-    private double mAmount;
+    private Double mRate;
 
     public String getSource() {
         return mSource;
@@ -26,19 +25,20 @@ public class CurrencyConversion {
         mTarget = target;
     }
 
-    public double getRate() {
+    public Double getRate() {
         return mRate;
     }
 
-    public void setRate(double rate) {
+    public void setRate(Double rate) {
         mRate = rate;
     }
 
-    public double getAmount() {
-        return mAmount;
+    public String getStringRate() {
+        return String.format("%.2f", mRate);
     }
 
-    public void setAmount(double amount) {
-        mAmount = amount;
+
+    public String getStringResult(Double amount) {
+        return String.format("%.2f", amount * mRate);
     }
 }
